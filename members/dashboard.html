@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Member Dashboard</title>
+</head>
+<body>
+<script type="module">
+  import { renderDashboard } from "../scripts/members/app-bundle.js";
+  
+  renderDashboard();
+
+  const localUID = localStorage.getItem("session_uid");
+  const administrativeRoles = ["Owner/Founder", "CEO", "Managing Director", "Admin", "Manager"];
+
+  if (!localUID) {
+      window.location.href = "auth/login.html";
+  } else {
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+      const database = getDatabase(initializeApp({ databaseURL: "https://github-website1-default-rtdb.firebaseio.com" }));
+
+      get(ref(database, `avindia/auth/members/${localUID}`)).then((snapshot) => {
+          if (snapshot.exists()) {
+              const profile = snapshot.val();
+              document.getElementById('member-name').textContent = profile.name;
+              document.getElementById('profile-uid').textContent = profile.uid;
+              document.getElementById('profile-email').textContent = profile.email;
+              document.getElementById('profile-role').textContent = profile.role;
+
+              if (administrativeRoles.includes(profile.role)) {
+                  document.getElementById('admin-panel').style.display = 'block';
+              }
+          } else {
+              localStorage.clear();
+              window.location.href = "auth/login.html";
+          }
+          document.getElementById('loading-screen').style.display = 'none';
+      }).catch(() => {
+          window.location.href = "auth/login.html";
+      });
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.clear();
+      window.location.href = "auth/login.html";
+  });
+</script>
+</body>
+</html>
 

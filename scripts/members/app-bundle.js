@@ -35,7 +35,7 @@ const CSS_STYLES = `
 
     .container { flex: 1; padding: 40px; max-width: 1100px; margin: 0 auto; width: 100%; }
     .welcome-card { background: linear-gradient(135deg, #039CFF, #8505FF); color: white; padding: 45px; border-radius: 24px; margin-bottom: 35px; box-shadow: 0 12px 30px rgba(133, 5, 255, 0.18); position: relative; overflow: hidden; }
-    .welcome-card h2 { 
+    .welcome-card h3 { 
     margin-bottom: 12px; 
     font-size: 34px; 
     font-weight: 800; 
@@ -122,7 +122,7 @@ export function renderDashboard() {
         </nav>
         <div class="container">
             <div class="welcome-card">
-                <h2>Hi, <span id="member-name">User</span>!</h2>
+                <h3>Hi, <span id="member-name">User</span>!</h3>
                 <p>Welcome to your personal corporate command overview panel.</p>
             </div>
             <div class="grid">

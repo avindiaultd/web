@@ -3,18 +3,15 @@
  * Electric Accent Palette: #039CFF -> #8505FF
  */
 
-// Shared Core Premium CSS Layout Engine
 const CSS_STYLES = `
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
     body { background: radial-gradient(circle at 10% 20%, rgba(3, 156, 255, 0.03) 0%, rgba(133, 5, 255, 0.03) 90%), #fafbfe; color: #1a202c; min-height: 100vh; display: flex; flex-direction: column; }
     
-    /* Security Layer Blocks */
     .noscript-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #1a202c; z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; text-align: center; }
     .noscript-box { background: #ffffff; padding: 45px; border-radius: 24px; max-width: 450px; border-top: 4px solid #8505FF; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
     .noscript-box h3 { font-size: 24px; color: #2d3748; margin-bottom: 12px; font-weight: 800; }
     .noscript-box p { color: #718096; font-size: 15px; line-height: 1.6; }
 
-    /* Forms & Containers */
     .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%; }
     .login-container { background: #ffffff; padding: 45px 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(133, 5, 255, 0.06); width: 100%; max-width: 420px; border: 1px solid rgba(133, 5, 255, 0.08); }
     .logo-space { width: 60px; height: 60px; margin: 0 auto 20px auto; border-radius: 16px; background: linear-gradient(135deg, #039CFF, #8505FF); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px; box-shadow: 0 8px 16px rgba(133, 5, 255, 0.2); }
@@ -28,7 +25,6 @@ const CSS_STYLES = `
     .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #039CFF, #8505FF); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(133, 5, 255, 0.2); margin-top: 10px; }
     .btn-submit:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 12px 26px rgba(133, 5, 255, 0.3); }
     
-    /* Navigation */
     .navbar { background-color: #ffffff; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-bottom: 1px solid #edf2f7; }
     .navbar h1 { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #039CFF, #8505FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .nav-links-container { display: flex; align-items: center; gap: 25px; }
@@ -37,7 +33,6 @@ const CSS_STYLES = `
     .btn-logout { background-color: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
     .btn-logout:hover { background-color: #e53e3e; color: white; }
 
-    /* Framework Structures */
     .container { flex: 1; padding: 40px; max-width: 1100px; margin: 0 auto; width: 100%; }
     .welcome-card { background: linear-gradient(135deg, #039CFF, #8505FF); color: white; padding: 45px; border-radius: 24px; margin-bottom: 35px; box-shadow: 0 12px 30px rgba(133, 5, 255, 0.18); position: relative; overflow: hidden; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 35px; }
@@ -49,7 +44,6 @@ const CSS_STYLES = `
     .actions-panel { background: white; padding: 35px; border-radius: 20px; display: none; border: 1px solid #edf2f7; }
     .btn-action { display: inline-block; background: linear-gradient(135deg, #039CFF, #8505FF); color: white; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 700; box-shadow: 0 6px 16px rgba(3, 156, 255, 0.25); }
 
-    /* Directory Layout */
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
     .member-card { background: white; padding: 30px; border-radius: 20px; border: 1px solid #edf2f7; text-align: center; position: relative; overflow: hidden; }
     .member-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 4px; background: linear-gradient(to right, #039CFF, #8505FF); }
@@ -66,14 +60,11 @@ const CSS_STYLES = `
     .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f8fafc; display: flex; justify-content: center; align-items: center; z-index: 999; font-size: 18px; font-weight: 700; color: #718096; }
 `;
 
-// Shared Infrastructure Assembly Method
 function initShell(noscriptMessage) {
-    // Inject Stylesheet Global Token
     const styleEl = document.createElement('style');
     styleEl.textContent = CSS_STYLES;
     document.head.appendChild(styleEl);
 
-    // Build Secure `<noscript>` Elements via DOM
     const noscript = document.createElement('noscript');
     noscript.innerHTML = `
         <div class="noscript-overlay">
@@ -86,10 +77,8 @@ function initShell(noscriptMessage) {
     document.body.appendChild(noscript);
 }
 
-// 🔑 COMPONENT A: LOGIN PAGE UI
 export function renderLogin() {
     initShell("JavaScript execution verification failed. Access denied to portal node algorithms.");
-    
     document.body.innerHTML += `
         <div class="login-wrapper">
             <div class="login-container">
@@ -112,16 +101,14 @@ export function renderLogin() {
     `;
 }
 
-// 📊 COMPONENT B: DASHBOARD PAGE UI
 export function renderDashboard() {
     initShell("Environment violation. Dashboard tree modules masked safely.");
-    
     document.body.innerHTML += `
         <div id="loading-screen" class="loading">Authenticating Session Securely...</div>
         <nav class="navbar">
             <h1>Avindia Portal</h1>
             <div class="nav-links-container">
-                <a href="team.html" class="text-link">View Team Directory</a>
+                <a href="index.html" class="text-link">View Team Directory</a>
                 <button id="logout-btn" class="btn-logout">Logout</button>
             </div>
         </nav>
@@ -138,16 +125,14 @@ export function renderDashboard() {
             <div id="admin-panel" class="actions-panel">
                 <h3>Administrative Panel Access Granted</h3>
                 <p style="color:#718096; margin-bottom:25px; font-size:15px;">You have database access authorization permissions to configure new node profiles securely.</p>
-                <a href="add-member.html" class="btn-action">+ Register New Team Member</a>
+                <a href="auth/add-member.html" class="btn-action">+ Register New Team Member</a>
             </div>
         </div>
     `;
 }
 
-// ➕ COMPONENT C: ADD MEMBER UI
 export function renderAddMember() {
     initShell("Database compilation error. Write streams denied when scripts are missing.");
-    
     document.body.innerHTML += `
         <div id="loading-screen" class="loading">Validating Local Credentials...</div>
         <div class="login-wrapper">
@@ -172,16 +157,14 @@ export function renderAddMember() {
                     </div>
                     <button type="submit" class="btn-submit">Provision Member Record</button>
                 </form>
-                <a href="dashboard.html" class="text-link" style="display:block; text-align:center; margin-top:20px;">← Cancel and Return</a>
+                <a href="../dashboard.html" class="text-link" style="display:block; text-align:center; margin-top:20px;">← Cancel and Return</a>
             </div>
         </div>
     `;
 }
 
-// 👥 COMPONENT D: TEAM DIRECTORY UI
 export function renderTeam() {
     initShell("Ecosystem membership data directory paths remain fully encrypted.");
-    
     document.body.innerHTML += `
         <div id="loading-screen" class="loading">Loading System Directory Ecosystem...</div>
         <nav class="navbar">
@@ -201,7 +184,6 @@ export function renderTeam() {
     `;
 }
 
-// 🔒 SHA-256 Utility Password Hasher
 export async function hashPassword(string) {
     const utf8 = new TextEncoder().encode(string);
     const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);

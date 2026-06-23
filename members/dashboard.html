@@ -9,45 +9,64 @@
 <script type="module">
   import { renderDashboard } from "../scripts/members/app-bundle.js";
   
+  // 1. First, build the interface layout fields instantly
   renderDashboard();
 
-  const localUID = localStorage.getItem("session_uid");
-  const administrativeRoles = ["Owner/Founder", "CEO", "Managing Director", "Admin", "Manager"];
+  // 2. Wrap all DOM configurations to let the interface settle first
+  setTimeout(() => {
+      const localUID = localStorage.getItem("session_uid");
+      const administrativeRoles = ["Owner/Founder", "CEO", "Managing Director", "Admin", "Manager"];
 
-  if (!localUID) {
-      window.location.href = "auth/login.html";
-  } else {
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+      if (!localUID) {
+          window.location.href = "auth/login.html";
+          return;
+      }
 
-      const database = getDatabase(initializeApp({ databaseURL: "https://github-website1-default-rtdb.firebaseio.com" }));
-
-      get(ref(database, `avindia/auth/members/${localUID}`)).then((snapshot) => {
-          if (snapshot.exists()) {
-              const profile = snapshot.val();
-              document.getElementById('member-name').textContent = profile.name;
-              document.getElementById('profile-uid').textContent = profile.uid;
-              document.getElementById('profile-email').textContent = profile.email;
-              document.getElementById('profile-role').textContent = profile.role;
-
-              if (administrativeRoles.includes(profile.role)) {
-                  document.getElementById('admin-panel').style.display = 'block';
-              }
-          } else {
+      // Safeguard check for logout button assignment binding
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+          logoutBtn.addEventListener('click', () => {
               localStorage.clear();
               window.location.href = "auth/login.html";
-          }
-          document.getElementById('loading-screen').style.display = 'none';
-      }).catch(() => {
-          window.location.href = "auth/login.html";
-      });
-  }
+          });
+      }
 
-  document.getElementById('logout-btn').addEventListener('click', () => {
-      localStorage.clear();
-      window.location.href = "auth/login.html";
-  });
+      // Initialize Firebase modules and fetch database data trees
+      import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js").then((firebaseApp) => {
+          import("https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js").then((firebaseDB) => {
+              
+              const app = firebaseApp.initializeApp({ databaseURL: "https://github-website1-default-rtdb.firebaseio.com" });
+              const database = firebaseDB.getDatabase(app);
+
+              firebaseDB.get(firebaseDB.ref(database, `avindia/auth/members/${localUID}`)).then((snapshot) => {
+                  if (snapshot.exists()) {
+                      const profile = snapshot.val();
+                      
+                      // Safely map values down to DOM points
+                      if(document.getElementById('member-name')) document.getElementById('member-name').textContent = profile.name || "User";
+                      if(document.getElementById('profile-uid')) document.getElementById('profile-uid').textContent = profile.uid || "--------";
+                      if(document.getElementById('profile-email')) document.getElementById('profile-email').textContent = profile.email || "--------";
+                      if(document.getElementById('profile-role')) document.getElementById('profile-role').textContent = profile.role || "--------";
+
+                      if (administrativeRoles.includes(profile.role)) {
+                          const adminPanel = document.getElementById('admin-panel');
+                          if (adminPanel) adminPanel.style.display = 'block';
+                      }
+                  } else {
+                      localStorage.clear();
+                      window.location.href = "auth/login.html";
+                  }
+                  
+                  const loader = document.getElementById('loading-screen');
+                  if (loader) loader.style.display = 'none';
+                  
+              }).catch((err) => {
+                  console.error("Database read failure:", err);
+                  window.location.href = "auth/login.html";
+              });
+          });
+      });
+  }, 50);
 </script>
 </body>
 </html>
-

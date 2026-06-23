@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avindia Directory — Team Members</title>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { renderTeam } from "../scripts/members/app-bundle.js";
 
+  renderTeam();
+
+  const localUID = localStorage.getItem("session_uid");
+  if (!localUID) {
+      window.location.href = "auth/login.html";
+  } else {
+      const database = getDatabase(initializeApp({ databaseURL: "https://github-website1-default-rtdb.firebaseio.com" }));
+      const directoryGrid = document.getElementById('directory-grid');
+      const countBadge = document.getElementById('count-badge');
+
+      get(ref(database, 'avindia/auth/members')).then((snapshot) => {
+          if (snapshot.exists()) {
+              let entriesHTML = "";
+              let counter = 0;
+              snapshot.forEach((childSnapshot) => {
+                  const profile = childSnapshot.val();
+                  counter++;
+                  const initialLetter = profile.name ? profile.name.charAt(0).toUpperCase() : 'M';
+                  const isExec = ["Owner/Founder", "CEO", "Managing Director", "Admin", "Manager"].includes(profile.role);
+                  
+                  entriesHTML += `
+                      <div class="member-card">
+                          <div class="avatar">${initialLetter}</div>
+                          <div class="m-name" style="font-weight:700; font-size:19px; margin-bottom:5px;">${profile.name}</div>
+                          <div class="m-role ${isExec ? 'role-executive' : 'role-staff'}">${profile.role}</div>
+                          <div style="height:1px; background:#edf2f7; margin:15px 0;"></div>
+                          <div class="m-meta">UID: <span>${profile.uid}</span></div>
+                          <div class="m-meta">Email: <span>${profile.email}</span></div>
+                      </div>
+                  `;
+              });
+              directoryGrid.innerHTML = entriesHTML;
+              countBadge.textContent = `${counter} Active Members`;
+          }
+          document.getElementById('loading-screen').style.display = 'none';
+      }).catch(() => {
+          window.location.href = "auth/login.html";
+      });
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.clear();
+      window.location.href = "auth/login.html";
+  });
+</script>
+</body>
+</html>

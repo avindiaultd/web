@@ -1,1 +1,59 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Team Member</title>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { renderAddMember, hashPassword } from "../../scripts/members/app-bundle.js";
+
+  renderAddMember();
+
+  const localUID = localStorage.getItem("session_uid");
+  const localRole = localStorage.getItem("session_role");
+  const authorizedRoles = ["Owner/Founder", "CEO", "Managing Director", "Admin", "Manager"];
+
+  if (!localUID || !authorizedRoles.includes(localRole)) {
+      alert("Access Denied.");
+      window.location.href = "login.html";
+  } else {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+  }
+
+  const database = getDatabase(initializeApp({ databaseURL: "https://github-website1-default-rtdb.firebaseio.com" }));
+
+  document.getElementById('member-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const messageBox = document.getElementById('message-box');
+      messageBox.style.display = 'none';
+
+      const customUid = document.getElementById('uid').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      try {
+          const hashedPassword = await hashPassword(password);
+          await set(ref(database, `avindia/auth/members/${customUid}`), {
+              uid: customUid, name, email, role, passwordHash: hashedPassword, createdAt: new Date().toISOString()
+          });
+          messageBox.textContent = "Success! Member account built.";
+          messageBox.className = "message-box success";
+          messageBox.style.display = "block";
+          document.getElementById('member-form').reset();
+      } catch(err) {
+          messageBox.textContent = err.message;
+          messageBox.className = "message-box error";
+          messageBox.style.display = "block";
+      }
+  });
+</script>
+</body>
+</html>

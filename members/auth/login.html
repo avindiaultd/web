@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Member Login Portal</title>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { renderLogin, hashPassword } from "../../scripts/members/app-bundle.js";
 
+  renderLogin();
+
+  const database = getDatabase(initializeApp({ databaseURL: "https://github-website1-default-rtdb.firebaseio.com" }));
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const uidInput = document.getElementById('uid').value.trim();
+      const passwordInput = document.getElementById('password').value;
+      const errorBox = document.getElementById('error-box');
+      errorBox.style.display = 'none';
+
+      try {
+          const snapshot = await get(ref(database, `avindia/auth/members/${uidInput}`));
+          if (!snapshot.exists()) throw new Error();
+
+          const memberData = snapshot.val();
+          const computedHash = await hashPassword(passwordInput);
+          if (memberData.passwordHash !== computedHash) throw new Error();
+
+          localStorage.setItem("session_uid", memberData.uid);
+          localStorage.setItem("session_role", memberData.role);
+          
+          await set(ref(database, `avindia/auth/members/${uidInput}/lastLoginAt`), new Date().toISOString());
+          window.location.href = "../dashboard.html";
+      } catch (error) {
+          errorBox.textContent = "Invalid UID or password.";
+          errorBox.style.display = 'block';
+      }
+  });
+</script>
+</body>
+</html>

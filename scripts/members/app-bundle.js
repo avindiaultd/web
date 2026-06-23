@@ -35,6 +35,7 @@ const CSS_STYLES = `
 
     .container { flex: 1; padding: 40px; max-width: 1100px; margin: 0 auto; width: 100%; }
     .welcome-card { background: linear-gradient(135deg, #039CFF, #8505FF); color: white; padding: 45px; border-radius: 24px; margin-bottom: 35px; box-shadow: 0 12px 30px rgba(133, 5, 255, 0.18); position: relative; overflow: hidden; }
+    .welcome-card h2 { color: #fff; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 35px; }
     .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.01); position: relative; overflow: hidden; border: 1px solid #edf2f7; }
     .card::before { content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 5px; background: linear-gradient(to bottom, #039CFF, #8505FF); }
